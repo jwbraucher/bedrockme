@@ -11,11 +11,11 @@ node container.
 
 ## To execute bedrockme:  
 ```
-docker run docker.io/jwbraucher/bedrockme:latest
+docker run docker.io/braucher/bedrockme:latest
 ```
 
 ## To build bedrockme:  
-git clone https://github.com/jwbraucher/bedrockme
+git clone https://github.com/braucher/bedrockme
 cd bedrockme
 make
 
