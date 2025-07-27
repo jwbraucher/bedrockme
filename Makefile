@@ -6,7 +6,7 @@ build:
 	docker buildx build --tag $(IMAGE) .
 
 run: build
-	docker run --init --rm -it $(IMAGE)
+	docker run --init --rm -it --env MODE=print $(IMAGE)
 
 lambda:
 	docker run --init --rm -it \

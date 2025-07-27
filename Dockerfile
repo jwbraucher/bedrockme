@@ -1,14 +1,42 @@
-FROM node:23-alpine
+FROM node:20-alpine3.16
 WORKDIR /opt/bedrockme
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"
 
 RUN apk add --no-cache \
-    git \
-    udev \
-    ttf-freefont \
-    chromium
+  autoconf \
+  automake \
+  chromium \
+  cmake \
+  curl-dev \
+  g++ \
+  git \
+  libexecinfo \
+  libexecinfo-dev \
+  libtool \
+  make \
+  nodejs \
+  npm \
+  python3 \
+  ttf-freefont \
+  udev \
+  unzip
 
-COPY main.js /opt/bedrockme/main.js
-COPY package.json /opt/bedrockme/package.json
+RUN npm install -g aws-lambda-ric
+
+ARG FUNCTION_DIR="/function"
+WORKDIR ${FUNCTION_DIR}
+
+# nodejs config
+COPY \
+  package.json \
+  package-lock.json \
+  ${FUNCTION_DIR}
+
+ENV PUPPETEER_SKIP_DOWNLOAD="true"
 RUN npm install
-ENTRYPOINT ["/usr/local/bin/node", "/opt/bedrockme/main.js"]
+
+COPY \
+  entrypoint.sh \
+  index.js \
+  ${FUNCTION_DIR}
+
+ENTRYPOINT ["/bin/sh", "/function/entrypoint.sh"]
