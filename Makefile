@@ -8,7 +8,7 @@ build:
 run: build
 	docker run --init --rm -it --env MODE=print $(IMAGE)
 
-lambda:
+lambda: build
 	docker run --init --rm -it \
     -v ~/.aws-lambda-rie:/aws-lambda -p 9000:8080 \
     --entrypoint /aws-lambda/aws-lambda-rie \

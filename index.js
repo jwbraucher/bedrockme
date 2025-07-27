@@ -4,6 +4,8 @@ const minecraft_url = 'https://www.minecraft.net/en-us/download/server/bedrock';
 
 var download_url = "";
 
+const isLambda = !!process.env.LAMBDA_TASK_ROOT;
+
 async function runBrowser() {
 
   const browser = await puppeteer.launch({
@@ -39,22 +41,15 @@ async function runBrowser() {
 
 async function app() {
   await runBrowser();
-
-  // exit early if requested
-  const MODE = process.env.MODE || 'LAMBDA';
-  if(MODE != 'LAMBDA') {
-    process.exit(0)
-  }
 }
 
 app()
 
 exports.handler = async (event) => {
-    const result = await runBrowser()
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify(download_url),
-    };
-    return response;
+  await runBrowser();
+  const response = {
+    statusCode: 200,
+    body: download_url
+  };
+  return response;
 };
-
