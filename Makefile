@@ -1,7 +1,16 @@
-.PHONY: all
+.PHONY: all run
 
-all:
-	docker buildx build \
-  --tag docker.io/braucher/bedrockme:latest \
-  --tag docker.io/braucher/bedrockme:v0.0.1 \
-  .
+IMAGE := docker.io/braucher/bedrockme:latest
+
+build:
+	docker buildx build --tag $(IMAGE) .
+
+run: build
+	docker run --init --rm -it $(IMAGE)
+
+lambda:
+	docker run --init --rm -it \
+    -v ~/.aws-lambda-rie:/aws-lambda -p 9000:8080 \
+    --entrypoint /aws-lambda/aws-lambda-rie \
+    $(IMAGE) \
+    /usr/local/bin/npx aws-lambda-ric index.handler
