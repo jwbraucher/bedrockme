@@ -1,6 +1,8 @@
 #!/bin/sh -ex
 
-if [ "${LAMBDA_TASK_ROOT}" == "" ]; then
+MODE="${MODE:-lambda}"
+
+if [ "${MODE}" != "lambda" ]; then
   /usr/local/bin/node index.js
   exit $?
 fi

@@ -47,9 +47,6 @@ app()
 
 exports.handler = async (event) => {
   await runBrowser();
-  const response = {
-    statusCode: 200,
-    body: download_url
-  };
+  const response = download_url;
   return response;
 };
