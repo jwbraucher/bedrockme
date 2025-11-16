@@ -1,10 +1,8 @@
 #!/bin/sh -ex
 
-MODE="${MODE:-lambda}"
-
-if [ "${MODE}" != "lambda" ]; then
+if [ "${AWS_LAMBDA_TASK_ROOT}" == "" ]; then
   /usr/local/bin/node index.js
   exit $?
 fi
 
-/usr/local/bin/npx aws-lambda-ric $*
+/usr/local/bin/npx aws-lambda-ric $1
