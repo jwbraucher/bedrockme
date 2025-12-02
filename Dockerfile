@@ -23,7 +23,8 @@ RUN apk add --no-cache \
 RUN mkdir -p \
   /function \
   /var/task \
-  /tmp/home
+  /tmp/home \
+  /minecraft
 
 # setup user for lambda / node
 RUN adduser -D -h /tmp/home app
@@ -50,8 +51,8 @@ COPY \
   index.js \
   ${FUNCTION_DIR}
 
-RUN chown -R app:app /tmp/home ${FUNCTION_DIR}
-RUN chmod -R a+rX /tmp/home ${FUNCTION_DIR}
+RUN chown -R app:app /minecraft /tmp/home ${FUNCTION_DIR}
+RUN chmod -R a+rX /minecraft /tmp/home ${FUNCTION_DIR}
 
 USER app
 ENTRYPOINT ["/bin/sh", "/function/entrypoint.sh"]

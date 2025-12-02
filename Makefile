@@ -1,13 +1,20 @@
 .PHONY: all run
 
-IMAGE := docker.io/braucher/bedrockme:latest
-ECR_IMAGE := 621353950768.dkr.ecr.us-east-1.amazonaws.com/braucher/bedrockme:20251116-1
+TAG := 20251201-1
+IMAGE := docker.io/braucher/bedrockme
+ECR_IMAGE := 621353950768.dkr.ecr.us-east-1.amazonaws.com/braucher/bedrockme
 
 build:
-	docker buildx build --tag $(IMAGE) --tag $(ECR_IMAGE) .
+	docker buildx build --tag $(IMAGE):latest --tag $(IMAGE):$(TAG) --tag $(ECR_IMAGE):$(TAG) .
 
 run: build
-	docker run --init --rm -it --env MODE=print $(IMAGE)
+	docker run --init --rm -it $(IMAGE):$(TAG)
+
+push: build
+	aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 621353950768.dkr.ecr.us-east-1.amazonaws.com
+	docker push $(ECR_IMAGE):$(TAG)
+	docker push $(IMAGE):$(TAG)
+	docker push $(IMAGE):latest
 
 lambda: build
 	docker run --init --rm -it \
