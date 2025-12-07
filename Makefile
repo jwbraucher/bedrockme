@@ -1,6 +1,6 @@
 .PHONY: all run
 
-TAG := 20251201-1
+TAG := 20251207-1
 IMAGE := docker.io/braucher/bedrockme
 ECR_IMAGE := 621353950768.dkr.ecr.us-east-1.amazonaws.com/braucher/bedrockme
 

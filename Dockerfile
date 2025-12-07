@@ -20,20 +20,24 @@ RUN apk add --no-cache \
   udev \
   unzip
 
+ENV HOME=/tmp/home
+ENV BEDROCK_DIR=/minecraft
+ENV BEDROCK_FILE=bedrock-url.txt
+ENV TASK_DIR="/function"
+ARG FUNCTION_DIR="/function"
+
 RUN mkdir -p \
-  /function \
-  /var/task \
-  /tmp/home \
-  /minecraft
+  ${FUNCTION_DIR} \
+  ${TASK_DIR} \
+  ${HOME} \
+  ${BEDROCK_DIR}
 
 # setup user for lambda / node
-RUN adduser -D -h /tmp/home app
-ENV HOME=/tmp/home
+RUN adduser -D -h ${HOME} app
 ENV NPM_CONFIG_CACHE=${HOME}/.npm
 
 # setup lambda base
 RUN npm install -g aws-lambda-ric
-ARG FUNCTION_DIR="/function"
 WORKDIR ${FUNCTION_DIR}
 
 # deploy nodejs deps
@@ -51,8 +55,8 @@ COPY \
   index.js \
   ${FUNCTION_DIR}
 
-RUN chown -R app:app /minecraft /tmp/home ${FUNCTION_DIR}
-RUN chmod -R a+rX /minecraft /tmp/home ${FUNCTION_DIR}
+RUN chown -R app:app ${BEDROCK_DIR} ${HOME} ${FUNCTION_DIR}
+RUN chmod -R a+rX ${BEDROCK_DIR} ${HOME} ${FUNCTION_DIR}
 
 USER app
 ENTRYPOINT ["/bin/sh", "/function/entrypoint.sh"]
